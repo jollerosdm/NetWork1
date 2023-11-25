@@ -151,7 +151,7 @@ namespace NetWork.Vista
                     {
                         FechaEntrada = date1,
                         FechaSalida = fechaSalida,
-                        IdCliente = cliente.IdCliente,
+                        DniCliente = cliente.Dni,
                         NumHabitacion = int.Parse(numHabitacion1)
                     };
 

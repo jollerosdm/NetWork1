@@ -7,26 +7,32 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NetWork.Modelo
-{
+{ 
+
     public class Facturas
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int NumFactura { get; set; }
-        public string IdCliente { get; set; }
+ 
+        public int CodigoReservas { get; set; } // Relación obligatoria con Reservas
         public int CodigoServicio { get; set; }
+        public string IdCliente { get; set; }
         public decimal TotalFactura { get; set; }
         public DateTime FechaFactura { get; set; }
+        
+       
 
 
-        public Facturas(int numFactura, string idCliente, int codigoServicio, decimal totalFactura, DateTime fechaFactura)
+        public Facturas(int numFactura, int codigoReservasFactura, string idCliente, int codigoServicio, decimal totalFactura, DateTime fechaFactura)
         {
             NumFactura = numFactura;
+            CodigoReservas = codigoReservasFactura;
             IdCliente = idCliente;
             CodigoServicio = codigoServicio;
             TotalFactura = totalFactura;
             FechaFactura = fechaFactura;
         }
         public Facturas() { }
+
     }
 }

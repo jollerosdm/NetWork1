@@ -13,9 +13,10 @@ namespace NetWork.Modelo
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CodigoReservas { get; set; }
+        public int CodigoTipoAloj { get; set; }
         public DateTime FechaEntrada { get; set; }
         public DateTime FechaSalida { get; set; }
-        public int IdCliente { get; set; }
+        public string DniCliente { get; set; }
         public int NumHabitacion { get; set; }
         public int EstadoReserva { get; set; }
         [NotMapped]
@@ -33,12 +34,13 @@ namespace NetWork.Modelo
 
         public Clientes Cliente { get; set; }
 
-        public Reservas(int codigoReservas, DateTime fechaEntrada, DateTime fechaSalida, int idCliente, int numHabitacion, int estadoReserva, string nombreCliente)
+        public Reservas(int codigoReservas, int codigoTipoAloj, DateTime fechaEntrada, DateTime fechaSalida, string dniCliente, int numHabitacion, int estadoReserva, string nombreCliente)
         {
             CodigoReservas = codigoReservas;
+            CodigoTipoAloj = codigoTipoAloj;
             FechaEntrada = fechaEntrada;
             FechaSalida = fechaSalida;
-            IdCliente = idCliente;
+            DniCliente = dniCliente;
             NumHabitacion = numHabitacion;
             EstadoReserva = estadoReserva;
             NombreCliente = nombreCliente;

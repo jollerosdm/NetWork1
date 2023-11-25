@@ -18,10 +18,11 @@ namespace NetWork.Vista
             cargarForm();
         }
 
+        //nueva conexión a la bbdd
         ConexionDB db;
         Reservas reserva = new Reservas();
 
-
+        //función de lectura de reserva
         public List<Reservas> Read()
         {
             try
@@ -39,7 +40,7 @@ namespace NetWork.Vista
             }
 
         }
-
+        //función actualizar reserva
         public void Update(Reservas reserva)
         {
             {
@@ -61,6 +62,7 @@ namespace NetWork.Vista
 
             }
         }
+        //función borrar reserva
         public void Delete(int codigoReserva)
         {
             {
@@ -69,10 +71,11 @@ namespace NetWork.Vista
                 {
                     using (db = new ConexionDB())
                     {
-                        db.Reservas.Remove(db.Reservas.Single(Reservas => Reservas.CodigoReservas == codigoReserva));
+                        db.Reservas.Remove(db.Reservas.
+                            Single(Reservas => 
+                            Reservas.CodigoReservas == codigoReserva));
                         db.SaveChanges();
                     }
-
                 }
 
                 catch (Exception ex)
@@ -83,72 +86,46 @@ namespace NetWork.Vista
             }
         }
 
-
+        //función cargar datos desde forms a variables de reserva
         private void cargarDatos()
-        {  
-               
-            int idCliente = ObtenerIdClientePorDNI(textBoxNifCliente.Text);
-
-            // Asignar el ID del cliente a la reserva
-            reserva.IdCliente = idCliente;
+        {
             reserva.CodigoReservas = Convert.ToInt32(textboxCodigoReserva.Text);
-            reserva.IdCliente = idCliente; 
+            reserva.CodigoTipoAloj = Convert.ToInt32(textBoxTipoAloj.Text);
+            reserva.DniCliente = textBoxNifCliente.Text;
             reserva.NumHabitacion = Convert.ToInt32(textBoxNumHab.Text);
             reserva.FechaEntrada = DateTime.Parse(dateTimePickerFechaReserva.Text);
-
-          
+            reserva.FechaSalida = DateTime.Parse(dateTimePickerSalida.Text);
 
             cargarGrid();
         }
 
-        private int ObtenerIdClientePorDNI(string dni)
-        {
-            using (ConexionDB db = new ConexionDB())
-            {
-                // Buscar el cliente por el DNI proporcionado
-                var cliente = db.Clientes.FirstOrDefault(c => c.Dni == dni);
-
-                // Verificar si se encontró el cliente
-                if (cliente != null)
-                {
-                    // Devolver el ID del cliente
-                    return cliente.IdCliente;
-                }
-
-                // Si no se encuentra el cliente, puedes manejarlo de acuerdo a tus necesidades
-                // Por ejemplo, lanzar una excepción, devolver un valor predeterminado, etc.
-                throw new Exception("Cliente no encontrado");
-            }
-        }
-
+        //ejecutar un read para obtener un listado de datos y visualizar a través de gridview
         private void cargarGrid()
         {
             var Lst = Read();
             dataGridView1.DataSource = Lst;
         }
 
+        //CargarGrid
         private void cargarForm()
         {
             cargarGrid();
         }
+
+        //Vacíar boxes en el forms
         private void limpiarDatos()
         {
             textboxCodigoReserva.Focus();
             textboxCodigoReserva.Text = string.Empty;
+            textBoxTipoAloj.Text = string.Empty;
             textBoxNifCliente.Text = string.Empty;
             dateTimePickerFechaReserva.Text = string.Empty;
+            dateTimePickerSalida.Text = string.Empty;
             textBoxNumHab.Text = string.Empty;
             cargarGrid();
 
         }
-
-
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        //Eliminar al pulsar botón
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             {
@@ -159,20 +136,29 @@ namespace NetWork.Vista
             }
         }
 
+        //Al clickar sobre las filas y celdas del gridview ==> copiar valor a los correspondientes textbox
+
         private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             {
                 textboxCodigoReserva.Text = dataGridView1.CurrentRow.Cells["CodigoReservas"].Value.ToString();
 
+                textBoxTipoAloj.Text = dataGridView1.CurrentRow.Cells["CodigoTipoAloj"].Value.ToString();
+
+
                 textBoxNifCliente.Text = dataGridView1.CurrentRow.Cells["DniCliente"].Value.ToString();
 
                 textBoxNumHab.Text = dataGridView1.CurrentRow.Cells["NumHabitacion"].Value.ToString();
 
-                dateTimePickerFechaReserva.Text = dataGridView1.CurrentRow.Cells["Fecha"].Value.ToString();
+
+                dateTimePickerFechaReserva.Text = dataGridView1.CurrentRow.Cells["FechaEntrada"].Value.ToString();
+
+                dateTimePickerSalida.Text = dataGridView1.CurrentRow.Cells["FechaSalida"].Value.ToString();
 
             }
         }
 
+        //Retornar al main menu
         private void button1_Click(object sender, EventArgs e)
         {
             MenuPrincipal registroForm = new MenuPrincipal(EmailUsuario.Text);
@@ -184,34 +170,127 @@ namespace NetWork.Vista
 
         private void btnGuardarCambios_Click(object sender, EventArgs e)
         {
-            DateTime fechaActual = DateTime.Now;
-            if (textboxCodigoReserva.Text != string.Empty)
+            cargarDatos();
+
+            if (!ExisteSolapamiento(reserva))
             {
-                cargarDatos();
-                int contador = 0;
-                foreach (DataGridViewRow r in dataGridView1.Rows)
+                Update(reserva);
+                cargarGrid();
+                limpiarDatos();
+            }
+            else
+            {
+                MessageBox.Show("Los datos ingresados no son válidos. " +
+                    "Por favor, verifique y corrija los campos.", 
+                    "Datos no válidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        /*private bool ExisteSolapamiento(Reservas reserva)
+        {
+            using (var dbContext = new ConexionDB())
+            {
+                // Obtener todas las reservas para la misma habitación
+                var reservasMismaHabitacion = dbContext.Reservas
+                    .Where(r => r.NumHabitacion == reserva.NumHabitacion && r.CodigoReservas != reserva.CodigoReservas)
+                    .ToList();
+
+                // Verificar si hay solapamiento con alguna reserva existente
+                foreach (var reservaExistente in reservasMismaHabitacion)
                 {
-                    if (r.Cells[1].Value.ToString() == Convert.ToString(reserva.FechaEntrada) && r.Cells[3].Value.ToString() == Convert.ToString(reserva.NumHabitacion))
+                    if (reservaExistente.FechaEntrada < reserva.FechaSalida && reservaExistente.FechaSalida > reserva.FechaEntrada)
                     {
-                        contador++;
+                        MessageBox.Show($"La habitación {reserva.NumHabitacion} ya está reservada en ese período de tiempo.", "Solapamiento de reservas", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return true; // Hay solapamiento
                     }
                 }
+            } // Al usar 'using', el contexto se liberará correctamente al salir de este bloque
 
-                if (contador == 0 && dateTimePickerFechaReserva.Value >= fechaActual.Date)
-                    {
-                        Update(reserva);
-                    }
-                else
-                    {
-                        MessageBox.Show("Habitación no disponible, seleccione otra fecha");
+            // No hay solapamiento
+            return false;
+        }*/
 
-                    }
-             }
-             cargarGrid();
-             limpiarDatos();
-         }
+        private bool ExisteSolapamiento(Reservas reserva)
+        {
+            using (var dbContext = new ConexionDB())
+            {
+                // Verificar si hay solapamiento con alguna reserva existente en la base de datos
+                var solapamiento = dbContext.Reservas
+                    .Any(r =>
+                        r.NumHabitacion == reserva.NumHabitacion &&
+                        r.CodigoReservas != reserva.CodigoReservas &&
+                        r.FechaEntrada < reserva.FechaSalida &&
+                        r.FechaSalida > reserva.FechaEntrada);
+
+                if (solapamiento)
+                {
+                    MessageBox.Show($"La habitación {reserva.NumHabitacion} " +
+                        $"ya está reservada en ese período de tiempo.", "Solapamiento de reservas", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return true; // Hay solapamiento
+                }
+            }
+
+            // No hay solapamiento
+            return false;
+        }
+
+
+
+
+        /*      // Obtener los valores de las celdas seleccionadas
+              int numeroHabitacion = Convert.ToInt32(textBoxNumHab.Text);
+              DateTime fechaEntrada = DateTime.Parse(dateTimePickerFechaReserva.Text);
+              DateTime fechaSalida = DateTime.Parse(dateTimePickerSalida.Text);
+              using (db = new ConexionDB())
+              {
+                  // Verificar si hay solapamiento con otras reservas para la misma habitación
+                  if (!ExisteSolapamiento(numeroHabitacion, fechaEntrada, fechaSalida))
+                  {
+                      Update(reserva);
+                      cargarGrid();
+                      limpiarDatos();
+                  }
+
+                  else
+                  {
+                      MessageBox.Show("Las fechas de entrada y salida se solapan con otras reservas para la misma habitación.", "Error de solapamiento", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                  }
+              }
+          }
+
+          private bool ExisteSolapamiento(int numeroHabitacion, DateTime nuevaFechaEntrada, DateTime nuevaFechaSalida)
+          {
+              // Obtener todas las reservas para la misma habitación
+              var reservasMismaHabitacion = db.Reservas
+                  .Where(r => r.NumHabitacion == numeroHabitacion)
+                  .ToList();
+
+              // Verificar si hay solapamiento con alguna reserva existente
+              foreach (var reservaExistente in reservasMismaHabitacion)
+              {
+                  if ((nuevaFechaEntrada >= reservaExistente.FechaEntrada && nuevaFechaEntrada < reservaExistente.FechaSalida) ||
+                      (nuevaFechaSalida > reservaExistente.FechaEntrada && nuevaFechaSalida <= reservaExistente.FechaSalida) ||
+                      (nuevaFechaEntrada <= reservaExistente.FechaEntrada && nuevaFechaSalida >= reservaExistente.FechaSalida))
+                  {
+                      // Hay solapamiento
+                      return true;
+                  }
+              }
+        }
+
+              // No hay solapamiento
+              return false;*/
+
+
+
+
+
+
+
+
+
 
 
     }
-
 }

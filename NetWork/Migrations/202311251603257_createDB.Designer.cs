@@ -7,13 +7,13 @@ namespace NetWork.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class NombreDeLaMigracion : IMigrationMetadata
+    public sealed partial class createDB : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(NombreDeLaMigracion));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(createDB));
         
         string IMigrationMetadata.Id
         {
-            get { return "202311171148217_NombreDeLaMigracion"; }
+            get { return "202311251603257_createDB"; }
         }
         
         string IMigrationMetadata.Source

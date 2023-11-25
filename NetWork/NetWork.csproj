@@ -57,9 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controlador\RecepcionistaControlador.cs" />
-    <Compile Include="Migrations\202311171148217_NombreDeLaMigracion.cs" />
-    <Compile Include="Migrations\202311171148217_NombreDeLaMigracion.designer.cs">
-      <DependentUpon>202311171148217_NombreDeLaMigracion.cs</DependentUpon>
+    <Compile Include="Migrations\202311251603257_createDB.cs" />
+    <Compile Include="Migrations\202311251603257_createDB.designer.cs">
+      <DependentUpon>202311251603257_createDB.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelo\Administrador.cs" />
@@ -93,11 +93,17 @@
     <Compile Include="Vista\FormClientes.Designer.cs">
       <DependentUpon>FormClientes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vista\FormFacturas.cs">
+    <Compile Include="Vista\FormFactura.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vista\FormFacturas.Designer.cs">
-      <DependentUpon>FormFacturas.cs</DependentUpon>
+    <Compile Include="Vista\FormFactura.Designer.cs">
+      <DependentUpon>FormFactura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vista\FormGestionFacturas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vista\FormGestionFacturas.Designer.cs">
+      <DependentUpon>FormGestionFacturas.cs</DependentUpon>
     </Compile>
     <Compile Include="Vista\FormHabitaciones.cs">
       <SubType>Form</SubType>
@@ -135,8 +141,8 @@
     <Compile Include="Vista\MenuPrincipal.Designer.cs">
       <DependentUpon>MenuPrincipal.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Migrations\202311171148217_NombreDeLaMigracion.resx">
-      <DependentUpon>202311171148217_NombreDeLaMigracion.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202311251603257_createDB.resx">
+      <DependentUpon>202311251603257_createDB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -149,8 +155,11 @@
     <EmbeddedResource Include="Vista\FormClientes.resx">
       <DependentUpon>FormClientes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Vista\FormFacturas.resx">
-      <DependentUpon>FormFacturas.cs</DependentUpon>
+    <EmbeddedResource Include="Vista\FormFactura.resx">
+      <DependentUpon>FormFactura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vista\FormGestionFacturas.resx">
+      <DependentUpon>FormGestionFacturas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vista\FormHabitaciones.resx">
       <DependentUpon>FormHabitaciones.cs</DependentUpon>

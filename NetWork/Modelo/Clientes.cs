@@ -23,7 +23,7 @@ namespace NetWork.Modelo {
         public TipoCliente Tipo {  get; set; }
         public string Email {  get; set; }
 
-        public Clientes(int idCliente, string dni, string nombre, int telefono, TipoCliente tipo, string email)
+        public Clientes (int idCliente, string dni, string nombre, int telefono, TipoCliente tipo, string email)
         {
             IdCliente = idCliente;
             Dni = dni;

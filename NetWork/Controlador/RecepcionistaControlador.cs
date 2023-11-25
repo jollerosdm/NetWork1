@@ -26,7 +26,7 @@ namespace NetWork.Controlador
                         FechaEntrada = r.FechaEntrada,
                         FechaSalida = r.FechaSalida,
                         NombreCliente = r.Cliente.Nombre,
-                        IdCliente = r.IdCliente, 
+                        DniCliente = r.DniCliente, 
                         NumHabitacion = r.NumHabitacion,
                         EstadoReserva = r.EstadoReserva
                     })
@@ -39,7 +39,7 @@ namespace NetWork.Controlador
                         FechaEntrada = r.FechaEntrada,
                         FechaSalida = r.FechaSalida,
                         NombreCliente = r.NombreCliente,
-                        IdCliente = r.IdCliente, 
+                        DniCliente = r.DniCliente, 
                         NumHabitacion = r.NumHabitacion,
                         EstadoReserva = r.EstadoReserva
                     })

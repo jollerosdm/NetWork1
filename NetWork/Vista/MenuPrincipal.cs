@@ -81,7 +81,7 @@ namespace NetWork.Vista
 
         private void button7_Click(object sender, EventArgs e)
         {
-            Form formulario = new FormFacturas(EmailUsuario.Text);
+            Form formulario = new FormGestionFacturas(EmailUsuario.Text);
             formulario.Show();
             this.Hide();
         }
